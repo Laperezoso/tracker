@@ -11,5 +11,4 @@ if ($conn->connect_error) {
 }
 
 require_once __DIR__ . '/CSRF.php';
-?>
 
