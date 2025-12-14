@@ -75,267 +75,117 @@ $result = $stmt->get_result();
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Manage Users</title>
-<style>
-:root {
-    --primary-blue: #007bff;
-    --dark: #111;
-    --light-gray: #f4f4f4;
-    --white: #fff;
-}
-
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    margin: 0;
-    background-color: var(--light-gray);
-    color: var(--dark);
-}
-
-
-.navbar {
-    position: sticky;
-    top: 0;
-    background-color: var(--dark);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.navbar .nav-links {
-    display: flex;
-    gap: 20px;
-}
-
-.navbar .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.navbar a {
-    color: var(--white);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.navbar a:hover {
-    color: var(--primary-blue);
-}
-
-.navbar .welcome {
-    color: var(--white);
-    font-weight: 500;
-    font-size: 15px;
-}
-
-
-.content {
-    padding: 24px;
-    max-width: 1100px;
-    margin: auto;
-}
-
-h1 {
-    text-transform: uppercase;
-    color: var(--primary-blue);
-    letter-spacing: 1px;
-}
-
-
-form {
-    background-color: var(--white);
-    padding: 20px;
-    border-radius: 6px;
-    box-shadow: 0 0 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-form h3 {
-    margin-top: 0;
-    color: var(--dark);
-}
-
-input[type="text"], input[type="password"], input[type="email"] {
-    padding: 8px;
-    width: calc(50% - 10px);
-    margin: 6px 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    padding: 8px 16px;
-    background-color: var(--primary-blue);
-    color: var(--white);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-
-.search-bar {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-}
-
-.search-bar input {
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 200px;
-}
-
-.search-bar button {
-    margin-left: 6px;
-}
-
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: var(--white);
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 0 6px rgba(0,0,0,0.1);
-}
-
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-}
-
-th {
-    background-color: var(--primary-blue);
-    color: var(--white);
-}
-
-tr:hover {
-    background-color: #eaf2ff;
-}
-
-
-.btn {
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    text-decoration: none;
-    color: var(--white);
-    margin: 0 4px;
-}
-
-.btn-toggle {
-    background-color: #17a2b8;
-}
-
-.btn-toggle:hover {
-    background-color: #138496;
-}
-
-.btn-delete {
-    background-color: #dc3545;
-}
-
-.btn-delete:hover {
-    background-color: #b02a37;
-}
-
-
-.msg-success {
-    color: green;
-    font-weight: 500;
-}
-
-.msg-error {
-    color: red;
-    font-weight: 500;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Users | Warranty Tracker</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<div class="navbar">
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
+    </div>
     <div class="nav-links">
-        <a href="dashboard.php">Dashboard</a>
-        <a href="manage_users.php">Manage Users</a>
-        <a href="manage_appliance.php">Manage Appliances</a>
-        <a href="print_report.php">Print Report</a>
+        <a href="dashboard.php" class="nav-link">Dashboard</a>
+        <a href="manage_users.php" class="nav-link active">Users</a>
+        <a href="manage_appliance.php" class="nav-link">Appliances</a>
+        <a href="print_report.php" class="nav-link">Reports</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="flex items-center justify-between mb-4">
+        <h2>Manage Users</h2>
     </div>
 
-    <div class="nav-right">
-        <span class="welcome">Welcome, <strong><?php echo $_SESSION["username"]; ?></strong></span>
-        <a href="../logout.php">Logout</a>
-    </div>
-</div>
+    <!-- Add User Form -->
+    <div class="card mb-4">
+        <h3 class="mb-4">Register New User</h3>
+        
+        <?php if (!empty($add_success)) echo "<div class='text-success mb-4'>$add_success</div>"; ?>
+        <?php if (!empty($add_error)) echo "<div class='text-danger mb-4'>$add_error</div>"; ?>
 
-<div class="content">
-    <h1>Manage Users</h1>
-
-   
-        <form method="POST">
-            <h3>Add New User</h3>
-            <input type="text" name="new_username" placeholder="Username" required>
-            <input type="password" name="new_password" placeholder="Password" required>
-            <input type="email" name="new_email" placeholder="Email" required>
-            <button type="submit" name="add_user">Add User</button>
+        <form method="POST" class="flex gap-4 items-center flex-wrap">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" name="new_username" class="form-control" placeholder="Username" required>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <input type="password" name="new_password" class="form-control" placeholder="Password" required>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+                <input type="email" name="new_email" class="form-control" placeholder="Email Address" required>
+            </div>
+            <div>
+                <button type="submit" name="add_user" class="btn btn-primary"><i class="fas fa-user-plus"></i> Add User</button>
+            </div>
         </form>
+    </div>
 
+    <!-- Search & List -->
+    <div class="card">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-4">
+            <h3>Registered Users</h3>
+            <form method="GET" class="flex gap-4">
+                <input type="text" name="search" class="form-control" placeholder="Search user..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
 
-    <?php if (!empty($add_success)) echo "<p class='msg-success'>$add_success</p>"; ?>
-    <?php if (!empty($add_error)) echo "<p class='msg-error'>$add_error</p>"; ?>
-
-    
-    <form method="GET" class="search-bar">
-        <input type="text" name="search" placeholder="Search user..." 
-               value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-        <button type="submit">Search</button>
-    </form>
-
-    
-    <table>
-        <tr>
-            <th>User ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>
-                    <td>{$row['user_id']}</td>
-                    <td>{$row['username']}</td>
-                    <td>{$row['email']}</td>
-                    <td>{$row['role']}</td>
-                    <td>{$row['status']}</td>
-                    <td>{$row['created_at']}</td>
-                    <td>";
-                if ($row['user_id'] == $_SESSION['user_id']) {
-                    echo "<strong>SELF</strong>";
-                } else {
-                    echo "<a class='btn btn-toggle' href='toggle_status.php?id={$row['user_id']}'>Toggle</a>
-                          <a class='btn btn-delete' href='delete_user.php?id={$row['user_id']}' onclick=\"return confirm('Delete this user?');\">Delete</a>";
-                }
-                echo "</td></tr>";
-            }
-        } else {
-            echo "<tr><td colspan='6'>No users found.</td></tr>";
-        }
-        ?>
-    </table>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Details</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Joined Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $status_badge = ($row['status'] == 'Active') ? 'badge-success' : 'badge-danger';
+                            
+                            echo "<tr>
+                                <td>#{$row['user_id']}</td>
+                                <td>
+                                    <div style='font-weight: 500;'>{$row['username']}</div>
+                                    <div style='color: var(--text-secondary); font-size: 0.85rem;'>{$row['email']}</div>
+                                </td>
+                                <td><span class='badge' style='background: #e0f2fe; color: #0369a1;'>".strtoupper($row['role'])."</span></td>
+                                <td><span class='badge {$status_badge}'>{$row['status']}</span></td>
+                                <td>{$row['created_at']}</td>
+                                <td>";
+                            
+                            if ($row['user_id'] == $_SESSION['user_id']) {
+                                echo "<span class='badge' style='background: #f1f5f9; color: var(--text-secondary);'>YOU</span>";
+                            } else {
+                                echo "<div class='flex gap-2'>
+                                        <a href='toggle_status.php?id={$row['user_id']}' class='btn btn-sm btn-secondary' title='Toggle Status'><i class='fas fa-sync-alt'></i></a>
+                                        <a href='delete_user.php?id={$row['user_id']}' class='btn btn-sm btn-danger' onclick=\"return confirm('Delete this user?');\" title='Delete'><i class='fas fa-trash'></i></a>
+                                      </div>";
+                            }
+                            echo "</td></tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6' style='text-align:center;'>No users found.</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 </body>

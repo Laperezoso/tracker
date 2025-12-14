@@ -55,300 +55,238 @@ if ($expired_result && $expired_result->num_rows > 0) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ADMIN DASHBOARD</title>
-<style>
-:root {
-    --primary-blue: #007bff;
-    --dark: #111;
-    --light-gray: #f4f4f4;
-    --white: #fff;
-}
-
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    margin: 0;
-    background-color: var(--light-gray);
-    color: var(--dark);
-}
-
-.navbar {
-    position: sticky;
-    top: 0;
-    background-color: var(--dark);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.navbar .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.navbar .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.navbar a {
-    color: var(--white);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s ease;
-}
-
-.navbar a:hover {
-    color: var(--primary-blue);
-}
-
-.navbar .welcome {
-    color: var(--white);
-    font-weight: 500;
-    font-size: 15px;
-}
-
-.content {
-    padding: 24px;
-    max-width: 1200px;
-    margin: auto;
-}
-
-h1 {
-    text-transform: uppercase;
-    color: var(--primary-blue);
-    letter-spacing: 1px;
-}
-
-h2 {
-    margin-top: 40px;
-    border-left: 5px solid var(--primary-blue);
-    padding-left: 10px;
-    color: var(--dark);
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-
-ul li {
-    background-color: var(--white);
-    padding: 14px;
-    border-left: 4px solid var(--primary-blue);
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    font-weight: 500;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
-    background-color: var(--white);
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-}
-
-th, td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-}
-
-th {
-    background-color: var(--primary-blue);
-    color: var(--white);
-}
-
-tr:hover {
-    background-color: #eaf2ff;
-}
-
-a.action-link {
-    color: var(--primary-blue);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-a.action-link:hover {
-    text-decoration: underline;
-}
-
-.status-active {
-    color: #28a745;
-    font-weight: 600;
-}
-
-.status-expiring {
-    color: #ffc107;
-    font-weight: 600;
-}
-
-.status-expired {
-    color: #dc3545;
-    font-weight: 600;
-}
-
-@media print {
-    .navbar, button, a.action-link {
-        display: none !important;
-    }
-    body {
-        background: white;
-    }
-    .content {
-        margin: 0;
-        padding: 0;
-    }
-}
-</style>
-
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Warranty Tracker</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-<div class="navbar">
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
+    </div>
     <div class="nav-links">
-        <a href="dashboard.php">Dashboard</a>
-        <a href="manage_users.php">Manage Users</a>
-        <a href="manage_appliance.php">Manage Appliances</a>
-        <a href="print_report.php">Print Report</a>
+        <a href="dashboard.php" class="nav-link active">Dashboard</a>
+        <a href="manage_users.php" class="nav-link">Users</a>
+        <a href="manage_appliance.php" class="nav-link">Appliances</a>
+        <a href="print_report.php" class="nav-link">Reports</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="flex items-center justify-between mb-4">
+        <h2>Dashboard Overview</h2>
+        <div class="text-secondary"><?php echo date("l, F j, Y"); ?></div>
     </div>
 
-    <div class="nav-right">
-        <span class="welcome">Welcome, <strong><?php echo $_SESSION["username"]; ?></strong></span>
-        <a href="../logout.php">Logout</a>
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="card flex items-center gap-4">
+            <div style="background: #e0f2fe; color: #0284c7; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-users"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Total Users</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $total_users; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #e0e7ff; color: #4f46e5; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-tv"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Total Appliances</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $total_appliances; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #fffbeb; color: #d97706; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Expiring Soon</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $expiring_soon; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #fee2e2; color: #dc2626; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Expired</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $expired; ?></div>
+            </div>
+        </div>
     </div>
-</div>
 
-
-
-<div class="content">
-<h1>Admin Dashboard</h1>
-<p>Welcome, <strong><?php echo $_SESSION["username"]; ?></strong>!</p>
-<hr>
-
-<h2>System Overview</h2>
-<ul>
-    <li><strong>Total Users:</strong> <?php echo $total_users; ?></li>
-    <li><strong>Total Appliances:</strong> <?php echo $total_appliances; ?></li>
-    <li><strong>Expiring Soon:</strong> <?php echo $expiring_soon; ?></li>
-    <li><strong>Expired:</strong> <?php echo $expired; ?></li>
-</ul>
-
-<hr>
-
-<h2>Users List</h2>
-<table>
-<tr>
-    <th>User ID</th>
-    <th>Username</th>
-    <th>Role</th>
-    <th>Created At</th>
-    <th>Actions</th>
-</tr>
-<?php
-$users = $conn->query("SELECT * FROM user_accounts WHERE role = 'user'");
-while ($row = $users->fetch_assoc()) {
-    echo "<tr>
-        <td>{$row['user_id']}</td>
-        <td>{$row['username']}</td>
-        <td>{$row['role']}</td>
-        <td>{$row['created_at']}</td>
-        <td><a class='action-link' href='delete_user.php?id={$row['user_id']}'>Delete</a></td>
-    </tr>";
-}
-?>
-</table>
-
-<hr>
-
-<h2>All Appliances</h2>
-<table>
-<tr>
-    <th>ID</th>
-    <th>User</th>
-    <th>Appliance</th>
-    <th>Brand</th>
-    <th>Model</th>
-    <th>Purchase Date</th>
-    <th>Expiry</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
-<?php
-$query = "
-    SELECT a.*, u.username, w.purchase_date, w.warranty_expiry
-    FROM appliances a
-    JOIN user_accounts u ON a.user_id = u.user_id
-    LEFT JOIN warranty w ON a.appliance_id = w.appliance_id
-    ORDER BY a.appliance_id DESC
-";
-$result = $conn->query($query);
-
-while ($row = $result->fetch_assoc()) {
-    $status_class = "";
-    $status_text = "";
-
-    if ($row['warranty_expiry'] && $row['warranty_expiry'] < date("Y-m-d")) {
-        $status_text = "Expired";
-        $status_class = "status-expired";
-    } elseif ($row['warranty_expiry'] && $row['warranty_expiry'] <= date("Y-m-d", strtotime("+7 days"))) {
-        $status_text = "Expiring Soon";
-        $status_class = "status-expiring";
-    } else {
-        $status_text = "Active";
-        $status_class = "status-active";
-    }
-
-    echo "<tr>
-        <td>{$row['appliance_id']}</td>
-        <td>{$row['username']}</td>
-        <td>{$row['appliance_name']}</td>
-        <td>{$row['brand']}</td>
-        <td>{$row['model']}</td>
-        <td>".($row['purchase_date'] ?? '')."</td>
-        <td>".($row['warranty_expiry'] ?? '')."</td>
-        <td class='{$status_class}'>{$status_text}</td>
-        <td><a class='action-link' href='delete_appliance.php?id={$row['appliance_id']}'>Delete</a></td>
-    </tr>";
-}
-?>
-</table>
-
-<hr>
-
-<h2>Charts Overview</h2>
-<div style="display: flex; flex-wrap: wrap; gap: 30px;">
-    <div style="flex: 1; min-width: 400px;">
-        <canvas id="userApplianceChart"></canvas>
+    <!-- Charts Section -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="card">
+            <h3 class="mb-4">Appliances per User</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="userApplianceChart"></canvas>
+            </div>
+        </div>
+        <div class="card">
+            <h3 class="mb-4">Appliance Status Distribution</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
     </div>
-    <div style="flex: 1; min-width: 400px;">
-        <canvas id="statusChart"></canvas>
+
+    <!-- Recent Data Tables -->
+    <div style="display: grid; gap: 2.5rem;">
+        
+        <!-- Users List -->
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h3>Registered Users</h3>
+                <a href="manage_users.php" class="btn btn-sm btn-secondary">Manage All</a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $users = $conn->query("SELECT * FROM user_accounts WHERE role = 'user' LIMIT 5");
+                        if ($users->num_rows > 0) {
+                            while ($row = $users->fetch_assoc()) {
+                                echo "<tr>
+                                    <td>#{$row['user_id']}</td>
+                                    <td>
+                                        <div class='flex items-center gap-4'>
+                                            <div style='background: #f1f5f9; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: var(--text-secondary);'>" . strtoupper(substr($row['username'], 0, 1)) . "</div>
+                                            {$row['username']}
+                                        </div>
+                                    </td>
+                                    <td><span class='badge' style='background: #e0f2fe; color: #0369a1;'>USER</span></td>
+                                    <td>" . date("M j, Y", strtotime($row['created_at'])) . "</td>
+                                    <td><a href='delete_user.php?id={$row['user_id']}' class='text-danger' onclick='return confirm(\"Are you sure?\")'><i class='fas fa-trash'></i></a></td>
+                                </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' style='text-align:center;'>No users found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Appliances List -->
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h3>Recent Appliances</h3>
+                <a href="manage_appliance.php" class="btn btn-sm btn-secondary">Manage All</a>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Appliance</th>
+                            <th>User</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $query = "
+                            SELECT a.*, u.username, w.warranty_expiry
+                            FROM appliances a
+                            JOIN user_accounts u ON a.user_id = u.user_id
+                            LEFT JOIN warranty w ON a.appliance_id = w.appliance_id
+                            ORDER BY a.appliance_id DESC LIMIT 5
+                        ";
+                        $result = $conn->query($query);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $status_badge = "badge-success";
+                                $status_text = "Active";
+
+                                if ($row['warranty_expiry'] && $row['warranty_expiry'] < date("Y-m-d")) {
+                                    $status_text = "Expired";
+                                    $status_badge = "badge-danger";
+                                } elseif ($row['warranty_expiry'] && $row['warranty_expiry'] <= date("Y-m-d", strtotime("+7 days"))) {
+                                    $status_text = "Expiring Soon";
+                                    $status_badge = "badge-warning";
+                                }
+
+                                echo "<tr>
+                                    <td>#{$row['appliance_id']}</td>
+                                    <td>
+                                        <div style='font-weight: 500;'>{$row['appliance_name']}</div>
+                                        <div style='font-size: 0.8rem; color: var(--text-secondary);'>{$row['brand']} {$row['model']}</div>
+                                    </td>
+                                    <td>{$row['username']}</td>
+                                    <td>" . ($row['warranty_expiry'] ? date("M j, Y", strtotime($row['warranty_expiry'])) : 'N/A') . "</td>
+                                    <td><span class='badge {$status_badge}'>{$status_text}</span></td>
+                                    <td>
+                                        <a href='delete_appliance.php?id={$row['appliance_id']}' class='text-danger' onclick='return confirm(\"Are you sure?\")'>
+                                            <i class='fas fa-trash'></i>
+                                        </a>
+                                    </td>
+                                </tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='6' style='text-align:center;'>No appliances found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+// Chart Config
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: false }
+    },
+    scales: {
+        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+        x: { grid: { display: false } }
+    }
+};
+
 // Users Appliances Count
 <?php
-$userCountQuery = "
+$userCountResult = $conn->query("
     SELECT u.username, COUNT(a.appliance_id) AS total
     FROM user_accounts u
     LEFT JOIN appliances a ON u.user_id = a.user_id
     WHERE u.role = 'user'
     GROUP BY u.user_id
-";
-$userCountResult = $conn->query($userCountQuery);
+");
 
 $usernames = [];
 $applianceCounts = [];
@@ -358,9 +296,7 @@ while ($row = $userCountResult->fetch_assoc()) {
 }
 
 // Appliance Status counts
-$statusQuery = "SELECT status, COUNT(*) AS total FROM appliances GROUP BY status";
-$statusResult = $conn->query($statusQuery);
-
+$statusResult = $conn->query("SELECT status, COUNT(*) AS total FROM appliances GROUP BY status");
 $statusNames = [];
 $statusTotals = [];
 while ($row = $statusResult->fetch_assoc()) {
@@ -369,46 +305,32 @@ while ($row = $statusResult->fetch_assoc()) {
 }
 ?>
 
-const ctx1 = document.getElementById('userApplianceChart');
-new Chart(ctx1, {
+new Chart(document.getElementById('userApplianceChart'), {
     type: 'bar',
     data: {
         labels: <?php echo json_encode($usernames); ?>,
         datasets: [{
-            label: 'Appliances per User',
+            label: 'Appliances',
             data: <?php echo json_encode($applianceCounts); ?>,
-            backgroundColor: 'rgba(0, 123, 255, 0.6)',
-            borderColor: 'rgba(0, 123, 255, 1)',
-            borderWidth: 1
+            backgroundColor: '#3b82f6',
+            borderRadius: 4
         }]
     },
-    options: {
-        plugins: {
-            title: { display: true, text: 'Users Appliances Counts', font: { size: 16, weight: 'bold' } },
-            legend: { display: false }
-        },
-        scales: { y: { beginAtZero: true } }
-    }
+    options: chartOptions
 });
 
-const ctx2 = document.getElementById('statusChart');
-new Chart(ctx2, {
-    type: 'bar',
+new Chart(document.getElementById('statusChart'), {
+    type: 'pie', // Changed to Pie for variety
     data: {
         labels: <?php echo json_encode($statusNames); ?>,
         datasets: [{
-            label: 'Appliance Status Count',
             data: <?php echo json_encode($statusTotals); ?>,
-            backgroundColor: 'rgba(0, 123, 255, 0.6)',
-            borderWidth: 1
+            backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#6366f1'],
+            borderWidth: 0
         }]
     },
     options: {
-        plugins: {
-            title: { display: true, text: 'Appliances Status Counts', font: { size: 16, weight: 'bold' } },
-            legend: { display: false }
-        },
-        scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } }
+        plugins: { legend: { position: 'bottom' } }
     }
 });
 </script>

@@ -58,111 +58,78 @@ if ($stmt->execute()) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Appliance</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: url("../image/logo.png") no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 1;
-        }
-        .form-container {
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 50px;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            width: 400px;
-            text-align: center;
-        }
-        h2 { 
-            text-align: center;
-            color: #2196F3;
-         }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        label { 
-            font-weight: bold;
-
-        }
-        input[type="text"], input[type="date"] {
-            width: 100%;
-            padding: 8px;
-            margin: 6px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        input[type="submit"] {
-            background-color: #2196F3;
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover { background-color: #1976D2; }
-        p {
-            text-align: center;
-            font-weight: bold;
-            color: <?php echo (strpos($message, '✅') !== false) ? 'green' : ((strpos($message, '⚠️') !== false) ? '#c68900' : 'red'); ?>;
-        }
-        a {
-            text-decoration: none;
-            color: #2196F3;
-            font-weight: bold;
-        }
-        a:hover { text-decoration: underline; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Appliance | Warranty Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="form-container">
-        <a href="dashboard.php">← Back to Dashboard</a>
-    <h2>Add Appliance</h2>
 
-    <?php if ($message): ?>
-        <p><?php echo htmlspecialchars($message); ?></p>
-    <?php endif; ?>
-
-    <form method="POST">
-        <label>Appliance Name:</label><br>
-        <input type="text" name="appliance_name" required><br><br>
-
-        <label>Brand:</label><br>
-        <input type="text" name="brand" required><br><br>
-
-        <label>Model:</label><br>
-        <input type="text" name="model" required><br><br>
-
-        <label>Purchase Date:</label><br>
-        <input type="date" name="purchase_date" required><br><br>
-
-        <label>Warranty Expiry:</label><br>
-        <input type="date" name="warranty_expiry" required><br><br>
-
-        <input type="submit" value="Add Appliance">
-    </form>
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
     </div>
+    <div class="nav-links">
+        <a href="dashboard.php" class="nav-link">Dashboard</a>
+        <a href="view_appliances.php" class="nav-link">My Appliances</a>
+        <a href="add_appliance.php" class="nav-link active">Add Appliance</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 600px;">
+    <div class="card">
+        <div class="flex items-center justify-between mb-4">
+            <h3>Add New Appliance</h3>
+            <a href="dashboard.php" class="text-secondary hover:text-primary"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+
+        <?php if (!empty($message)): ?>
+            <div class="text-center mb-4 <?php echo (strpos($message, '✅') !== false || strpos($message, 'successfully') !== false) ? 'text-success' : 'text-danger'; ?>">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST">
+            <div class="form-group">
+                <label class="form-label">Appliance Name</label>
+                <input type="text" name="appliance_name" class="form-control" placeholder="e.g. Washing Machine" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Brand</label>
+                <input type="text" name="brand" class="form-control" placeholder="e.g. LG" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Model</label>
+                <input type="text" name="model" class="form-control" placeholder="e.g. WM-123X" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Purchase Date</label>
+                    <input type="date" name="purchase_date" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Warranty Expiry</label>
+                    <input type="date" name="warranty_expiry" class="form-control" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full mt-4">
+                <i class="fas fa-plus-circle"></i> Add Appliance
+            </button>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>

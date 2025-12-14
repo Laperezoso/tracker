@@ -58,131 +58,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Appliance Warranty Tracker</title>
-    <style>
-      
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: url("image/logo.png") no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-}
-
-
-.overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
-    z-index: 1;
-}
-
-
-.login-container {
-    position: relative;
-    z-index: 2;
-}
-
-.login-box {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 40px 50px;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    width: 360px;
-}
-
-.login-box h2 {
-    color: #0d47a1;
-    margin-bottom: 10px;
-}
-
-.login-box h3 {
-    color: #333;
-    font-weight: 500;
-    margin-bottom: 25px;
-}
-
-.login-box label {
-    display: block;
-    text-align: left;
-    margin: 10px 0 5px;
-    color: #222;
-    font-weight: 500;
-}
-
-.login-box input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    margin-bottom: 15px;
-    transition: 0.3s;
-}
-
-.login-box input:focus {
-    border-color: #0d47a1;
-    outline: none;
-    box-shadow: 0 0 5px #0d47a1;
-}
-
-.login-box button {
-    width: 100%;
-    padding: 12px;
-    background-color: #0d47a1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.login-box button:hover {
-    background-color: #1565c0;
-}
-
-.error {
-    color: #d32f2f;
-    background: #ffebee;
-    border: 1px solid #f44336;
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <div class="overlay"></div>
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Appliance Service Warranty Tracker</h2>
-            <h3>Login</h3>
-
-            <?php if (!empty($error)): ?>
-                <p class="error"><?php echo htmlspecialchars($error); ?></p>
-            <?php endif; ?>
-
-            <form method="POST" action="">
-                <label>Username</label>
-                <input type="text" name="username" required>
-
-                <label>Password</label>
-                <input type="password" name="password" required>
-
-                <button type="submit">Login</button>
-            </form>
+<body class="login-page">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo" style="background: transparent;">
+                <img src="image/Clearbglogo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <h2>Welcome Back</h2>
+            <p style="color: var(--text-secondary); margin-top: 0.5rem;">Sign in to your account</p>
         </div>
+
+        <?php if (!empty($error)): ?>
+            <div style="background-color: var(--danger); color: white; padding: 0.75rem; border-radius: var(--radius); margin-bottom: 1.5rem; font-size: 0.9rem; text-align: center;">
+                <?php echo htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST" action="">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">Sign In</button>
+        </form>
     </div>
 </body>
 </html>

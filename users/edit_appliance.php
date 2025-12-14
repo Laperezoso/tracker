@@ -102,147 +102,80 @@ if (!$appliance) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Appliance | Appliance Tracker</title>
-    <style>
-       
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background: url("../image/logo.png") no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-      
-        .overlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 1;
-        }
-
-       
-        .form-container {
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px 50px;
-            border-radius: 16px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            width: 400px;
-            text-align: center;
-        }
-
-        h2 {
-            color: #0d47a1;
-            margin-bottom: 10px;
-        }
-
-        a.back {
-            display: inline-block;
-            color: #0d47a1;
-            text-decoration: none;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        a.back:hover {
-            text-decoration: underline;
-        }
-
-        label {
-            display: block;
-            text-align: left;
-            font-weight: 600;
-            margin: 10px 0 5px;
-            color: #222;
-        }
-
-        input[type="text"], input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #bbb;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            transition: 0.3s;
-        }
-
-        input[type="text"]:focus, input[type="date"]:focus {
-            border-color: #0d47a1;
-            box-shadow: 0 0 6px #0d47a1;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #0d47a1;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #1565c0;
-        }
-
-        .message {
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .success { color: green; }
-        .warning { color: #c68900; }
-        .error { color: red; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Appliance | Warranty Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="overlay"></div>
 
-    <div class="form-container">
-        <a href="view_appliances.php" class="back">← Back to My Appliances</a>
-        <h2>Edit Appliance</h2>
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
+    </div>
+    <div class="nav-links">
+        <a href="dashboard.php" class="nav-link">Dashboard</a>
+        <a href="view_appliances.php" class="nav-link active">My Appliances</a>
+        <a href="add_appliance.php" class="nav-link">Add Appliance</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
 
-        <?php if ($message): ?>
-            <p class="message 
-                <?php 
-                    echo (strpos($message, '✅') !== false) ? 'success' : 
-                         ((strpos($message, '⚠️') !== false) ? 'warning' : 'error'); 
-                ?>">
+<div class="container" style="max-width: 600px;">
+    <div class="card">
+        <div class="flex items-center justify-between mb-4">
+            <h3>Edit Appliance</h3>
+            <a href="view_appliances.php" class="text-secondary hover:text-primary"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+
+        <?php if (!empty($message)): ?>
+            <div class="text-center mb-4 <?php echo (strpos($message, '✅') !== false || strpos($message, 'successfully') !== false) ? 'text-success' : 'text-danger'; ?>">
                 <?php echo htmlspecialchars($message); ?>
-            </p>
+            </div>
         <?php endif; ?>
 
         <?php if ($appliance): ?>
         <form method="POST">
-            <label>Appliance Name</label>
-            <input type="text" name="appliance_name" value="<?php echo htmlspecialchars($appliance['appliance_name']); ?>" required>
+            <div class="form-group">
+                <label class="form-label">Appliance Name</label>
+                <input type="text" name="appliance_name" class="form-control" value="<?php echo htmlspecialchars($appliance['appliance_name']); ?>" required>
+            </div>
 
-            <label>Brand</label>
-            <input type="text" name="brand" value="<?php echo htmlspecialchars($appliance['brand']); ?>" required>
+            <div class="form-group">
+                <label class="form-label">Brand</label>
+                <input type="text" name="brand" class="form-control" value="<?php echo htmlspecialchars($appliance['brand']); ?>" required>
+            </div>
 
-            <label>Model</label>
-            <input type="text" name="model" value="<?php echo htmlspecialchars($appliance['model']); ?>" required>
+            <div class="form-group">
+                <label class="form-label">Model</label>
+                <input type="text" name="model" class="form-control" value="<?php echo htmlspecialchars($appliance['model']); ?>" required>
+            </div>
 
-            <label>Purchase Date</label>
-            <input type="date" name="purchase_date" value="<?php echo htmlspecialchars($appliance['purchase_date']); ?>" required>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">Purchase Date</label>
+                    <input type="date" name="purchase_date" class="form-control" value="<?php echo htmlspecialchars($appliance['purchase_date']); ?>" required>
+                </div>
 
-            <label>Warranty Expiry</label>
-            <input type="date" name="warranty_expiry" value="<?php echo htmlspecialchars($appliance['warranty_expiry']); ?>" required>
+                <div class="form-group">
+                    <label class="form-label">Warranty Expiry</label>
+                    <input type="date" name="warranty_expiry" class="form-control" value="<?php echo htmlspecialchars($appliance['warranty_expiry']); ?>" required>
+                </div>
+            </div>
 
-            <button type="submit">Update Appliance</button>
+            <button type="submit" class="btn btn-primary w-full mt-4">
+                <i class="fas fa-save"></i> Update Appliance
+            </button>
         </form>
         <?php endif; ?>
     </div>
+</div>
+
 </body>
 </html>

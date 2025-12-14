@@ -42,200 +42,104 @@ $date = date("F j, Y");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Dashboard</title>
-    <style>
-        body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #f5f8ff;
-            color: #000;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav {
-            background-color: #000000ff;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: 500;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .dashboard {
-            max-width: 900px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-info {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header-info h2 {
-            color: #0d47a1;
-            margin-bottom: 5px;
-        }
-
-        .overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-
-        .box {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            font-weight: bold;
-        }
-
-        .box span {
-            display: block;
-            font-size: 35px;
-            color: #0d47a1;
-            margin-top: 8px;
-        }
-
-        .reminder {
-            margin-top: 50px;
-            background: #bbdefb;
-            padding: 20px;
-            border-left: 6px solid #0d47a1;
-            border-radius: 8px;
-        }
-
-        footer {
-    text-align: center;
-    background-color: #000;
-    color: white;
-    padding: 40px 0 20px;
-    margin-top: 60px;
-    font-size: 15px;
-}
-
-.social-icons {
-    margin-bottom: 15px;
-}
-
-.social-icons a img {
-    width: 40px;
-    height: 40px;
-    margin: 0 10px;
-    border-radius: 50%;
-    background-color: white;
-    padding: 8px;
-    transition: transform 0.2s ease, background-color 0.3s;
-}
-
-.social-icons a img:hover {
-    transform: scale(1.1);
-    background-color: #0d47a1;
-}
-
-footer p {
-    margin: 6px 0;
-    color: #ccc;
-}
-
-footer p strong {
-    color: #fff;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-.copyright {
-    color: #777;
-    font-size: 13px;
-    margin-top: 10px;
-}
-
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Warranty Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <nav>
-        <div class="nav-left">
-            <a href="add_appliance.php">Add Appliance</a>
-            <a href="view_appliances.php">View Appliances</a>
-        </div>
-        <div class="nav-right">
-            <a href="../logout.php">Logout</a>
-        </div>
-    </nav>
-
-    <div class="dashboard">
-        <div class="header-info">
-            <h2>Welcome, <?php echo htmlspecialchars($username); ?>!</h2>
-            <p><?php echo $date; ?></p>
-        </div>
-
-        <div class="overview">
-            <div class="box">
-                Total Appliances
-                <span><?php echo $totalResult; ?></span>
-            </div>
-            <div class="box">
-                Working
-                <span><?php echo $workingResult; ?></span>
-            </div>
-            <div class="box">
-                Broken
-                <span><?php echo $brokenResult; ?></span>
-            </div>
-            <div class="box">
-                Under Repair
-                <span><?php echo $repairResult; ?></span>
-            </div>
-            <div class="box">
-                Expired
-                <span><?php echo $expiredResult; ?></span>
-            </div>
-        </div>
-
-        <div class="reminder">
-            <h3>🔔 Reminder</h3>
-            <p>Keep your appliance details up-to-date. Always check your warranty expiry before requesting service.</p>
-        </div>
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
     </div>
-
-    <footer>
-    <div class="social-icons">
-        <a href="#" title="Facebook"><img src="../image/facebook.png" alt="Facebook"></a>
-        <a href="mailto:support@myappliancetracker.com" title="Gmail"><img src="../image/gmail.png" alt="Gmail"></a>
-        <a href="#" title="Twitter"><img src="../image/twitter.png" alt="Twitter"></a>
+    <div class="nav-links">
+        <a href="dashboard.php" class="nav-link active">Dashboard</a>
+        <a href="view_appliances.php" class="nav-link">My Appliances</a>
+        <a href="add_appliance.php" class="nav-link">Add Appliance</a>
     </div>
-
-    <p><strong>ApplianceServiceWarrantyTracker</strong> — Making home management easier.</p>
-    <p>Need help? Contact us at 
-        <a href="mailto:WarrantyTracker@gmail.com" style="color:#90caf9; text-decoration:none;">
-            WarrantyTracker@gmail.com
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($username); ?></span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
         </a>
-    </p>
+    </div>
+</nav>
 
-    <p class="copyright">© <?php echo date("Y"); ?> ApplianceServiceWarrantyTracker</p>
+<div class="container">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h2>User Dashboard</h2>
+            <div class="text-secondary">Welcome back, get an overview of your appliances.</div>
+        </div>
+        <div class="text-secondary"><?php echo $date; ?></div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="card flex items-center gap-4">
+            <div style="background: #e0f2fe; color: #0284c7; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-cube"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Total Appliances</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $totalResult; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #e0e7ff; color: #4f46e5; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Working</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $workingResult; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #fee2e2; color: #dc2626; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Broken</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $brokenResult; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #fffbeb; color: #d97706; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-tools"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">In Repair</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $repairResult; ?></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-left: 4px solid var(--accent-color);">
+        <div class="flex items-center gap-4">
+            <i class="fas fa-bell text-secondary" style="font-size: 1.5rem;"></i>
+            <div>
+                <h3 style="margin-bottom: 0.25rem;">Reminder</h3>
+                <p class="text-secondary" style="margin: 0;">Keep your appliance details up-to-date. Always check your warranty expiry before requesting service.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="flex justify-center gap-4 mb-4">
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-twitter"></i></a>
+        <a href="mailto:WarrantyTracker@gmail.com" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;"><strong>Appliance Warranty Tracker</strong> — Making home management easier.</p>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;">razelherodias014@gmail.com</p>
+    <p class="text-secondary" style="font-size: 0.9rem;">&copy; <?php echo date("Y"); ?> Appliance Service Warranty Tracker</p>
 </footer>
-
-
-
 
 </body>
 </html>

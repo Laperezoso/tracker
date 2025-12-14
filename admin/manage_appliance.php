@@ -81,279 +81,124 @@
     $users = $conn->query("SELECT user_id, username FROM user_accounts WHERE role = 'user'");
     ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Manage Appliances</title>
-        <style>
-        
-            body {
-                font-family: "Segoe UI", Arial, sans-serif;
-                background-color: #f5f7fa;
-                margin: 0;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Appliances | Warranty Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
 
-            .navbar {
-                background-color: #000000ff;
-                color: white;
-                padding: 15px 30px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
+    </div>
+    <div class="nav-links">
+        <a href="dashboard.php" class="nav-link">Dashboard</a>
+        <a href="manage_users.php" class="nav-link">Users</a>
+        <a href="manage_appliance.php" class="nav-link active">Appliances</a>
+        <a href="print_report.php" class="nav-link">Reports</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
 
-            .navbar a {
-                color: white;
-                text-decoration: none;
-                margin-right: 20px;
-                font-weight: 500;
-            }
-
-            .navbar a.active {
-                text-decoration: underline;
-            }
-
-            .navbar a:hover {
-                text-decoration: underline;
-            }
-
-            .nav-right {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-
-            .logout {
-                background: black;
-                color: #0078D7;
-                padding: 6px 12px;
-                border-radius: 5px;
-                font-weight: 600;
-            }
-
-        
-            .content {
-                padding: 30px 50px;
-            }
-
-            h1.page-title {
-                color: rgb(0, 123, 255);
-                margin-bottom: 20px;
-            }
-
-        
-            .form-container {
-                background: white;
-                padding: 20px 30px;
-                border-radius: 8px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-                margin-bottom: 30px;
-            }
-
-            .form-title {
-                margin-top: 0;
-                color: #0078D7;
-            }
-
-            .form-row {
-                display: flex;
-                gap: 15px;
-                margin-bottom: 10px;
-            }
-
-            input, select {
-                padding: 8px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                flex: 1;
-            }
-
-            .btn {
-                padding: 8px 15px;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-            }
-
-            .btn-add {
-                background-color: #0078D7;
-                color: white;
-                font-weight: 600;
-            }
-
-            .btn-add:hover {
-                background-color: #005fa3;
-            }
-
-            .msg-success {
-                color: green;
-                font-weight: 600;
-            }
-
-            .msg-error {
-                color: red;
-                font-weight: 600;
-            }
-
-        
-            .search-section {
-                margin-bottom: 10px;
-            }
-
-            .search-bar {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                justify-content: flex-start;
-            }
-
-            .search-bar input {
-                width: 200px;
-            }
-
-            .btn-search {
-                background-color: #0078D7;
-                color: white;
-            }
-
-            
-            .table-container {
-                background: white;
-                border-radius: 8px;
-                padding: 20px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th {
-                background-color: #0078D7;
-                color: white;
-                text-align: left;
-                padding: 10px;
-            }
-
-            td {
-                padding: 10px;
-                border-bottom: 1px solid #ddd;
-            }
-
-            tr:hover {
-                background-color: #f0f6ff;
-            }
-
-            .btn-edit {
-                background-color: #ffb400;
-                color: white;
-                margin-right: 5px;
-            }
-
-            .btn-delete {
-                background-color: #d9534f;
-                color: white;
-            }
-
-            .btn-edit:hover { background-color: #e0a100; }
-            .btn-delete:hover { background-color: #c9302c; }
-        </style>
-    </head>
-
-    <body>
-    <div class="navbar">
-        <div class="nav-left">
-            <a href="dashboard.php">Dashboard</a>
-            <a href="manage_users.php">Manage Users</a>
-            <a href="manage_appliance.php" class="active">Manage Appliances</a>
-            <a href="print_report.php">Print Report</a>
-        </div>
-        <div class="nav-right">
-            <span>Welcome, <strong><?php echo $_SESSION['username']; ?></strong></span>
-            <a href="../logout.php" class="logout">Logout</a>
-        </div>
+<div class="container">
+    <div class="flex items-center justify-between mb-4">
+        <h2>Manage Appliances</h2>
     </div>
 
-    <div class="content">
-        <h1 class="page-title">Manage Appliances</h1>
-
+    <!-- Add Appliance Form -->
+    <div class="card mb-4">
+        <h3 class="mb-4">Add New Appliance</h3>
         
-        <div class="form-container">
-            <form method="POST">
-                <h3 class="form-title">Add New Appliance</h3>
+        <?php if (!empty($add_success)) echo "<div class='text-success mb-4'>$add_success</div>"; ?>
+        <?php if (!empty($add_error)) echo "<div class='text-danger mb-4'>$add_error</div>"; ?>
 
-                <div class="form-row">
-                    <input type="text" name="appliance_name" placeholder="Appliance Name" required>
-                    <input type="text" name="brand" placeholder="Brand" required>
+        <form method="POST">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Appliance Name</label>
+                    <input type="text" name="appliance_name" class="form-control" placeholder="e.g. Microwave" required>
                 </div>
-
-                <div class="form-row">
-                    <input type="text" name="model" placeholder="Model" required>
-                    <p><strong>Purchased Date:</strong></p>
-                    <input type="date" name="purchase_date" required>
-                    <p><strong>Due Date:</strong></p>
-                    <input type="date" name="warranty_expiry" required>
+                <div>
+                    <label class="form-label">Brand</label>
+                    <input type="text" name="brand" class="form-control" placeholder="e.g. Samsung" required>
                 </div>
+                <div>
+                    <label class="form-label">Model</label>
+                    <input type="text" name="model" class="form-control" placeholder="e.g. MW-1234" required>
+                </div>
+            </div>
 
-                <div class="form-row">
-                    <p><strong>Status:</strong></p>
-                    <select name="status" required>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label class="form-label">Purchase Date</label>
+                    <input type="date" name="purchase_date" class="form-control" required>
+                </div>
+                <div>
+                    <label class="form-label">Warranty Expiry</label>
+                    <input type="date" name="warranty_expiry" class="form-control" required>
+                </div>
+                <div>
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-control" required>
                         <option value="Working">Working</option>
                         <option value="Broken">Broken</option>
                         <option value="Under Repair">Under Repair</option>
                     </select>
-
-                    <select name="user_id" required>
-                        <option value="">-- Assign to User --</option>
-                        <?php while ($u = $users->fetch_assoc()): ?>
-                            <option value="<?php echo $u['user_id']; ?>">
-                                <?php echo htmlspecialchars($u['username']); ?>
-                            </option>
-                        <?php endwhile; ?>
-                    </select>
                 </div>
+                 <div>
+                    <label class="form-label">Assign User</label>
+                    <input type="text" id="userSearch" class="form-control" placeholder="Search user..." list="userList" required>
+                    <input type="hidden" name="user_id" id="userId">
+                    <datalist id="userList">
+                        <?php while ($u = $users->fetch_assoc()): ?>
+                            <option value="<?php echo htmlspecialchars($u['username']); ?>" data-id="<?php echo $u['user_id']; ?>"></option>
+                        <?php endwhile; ?>
+                    </datalist>
+                </div>
+            </div>
 
-                <button type="submit" name="add_appliance" class="btn btn-add">Add Appliance</button>
-            </form>
+            <button type="submit" name="add_appliance" class="btn btn-primary"><i class="fas fa-plus"></i> Add Appliance</button>
+        </form>
+    </div>
 
-            <?php if (!empty($add_success)) echo "<p class='msg-success'>$add_success</p>"; ?>
-            <?php if (!empty($add_error)) echo "<p class='msg-error'>$add_error</p>"; ?>
-        </div>
-
-        
-        <div class="search-section">
-            <form method="GET" class="search-bar">
-                <input type="text" name="search" placeholder="Search appliance..."
-                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                <select name="status">
-                    <option value="">Filter by Status</option>
+    <!-- Search & List -->
+    <div class="card">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-4">
+            <h3>Appliance List</h3>
+            <form method="GET" class="flex gap-4">
+                <input type="text" name="search" class="form-control" placeholder="Search appliance..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <select name="status" class="form-control" style="width: auto;">
+                    <option value="">All Statuses</option>
                     <option value="Working" <?php if ($status_filter === "Working") echo "selected"; ?>>Working</option>
                     <option value="Broken" <?php if ($status_filter === "Broken") echo "selected"; ?>>Broken</option>
                     <option value="Under Repair" <?php if ($status_filter === "Under Repair") echo "selected"; ?>>Under Repair</option>
                     <option value="Expired" <?php if ($status_filter === "Expired") echo "selected"; ?>>Expired</option>
                 </select>
-                <button type="submit" class="btn btn-search">Search</button>
+                <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
 
-        
         <div class="table-container">
-            <table>
+            <table class="table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Appliance Name</th>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th>Purchase Date</th>
-                        <th>Warranty Expiry</th>
+                        <th>Appliance</th>
+                        <th>Details</th>
+                        <th>Date</th>
                         <th>Status</th>
-                        <th>Assigned User</th>
+                        <th>Assigned To</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -361,28 +206,57 @@
                     <?php
                     if ($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
+                            $status_badge = "badge-success"; 
+                            if ($row['status'] == 'Broken') $status_badge = "badge-danger";
+                            if ($row['status'] == 'Under Repair') $status_badge = "badge-warning";
+                            
+                            // Check expiry for badge logic override if needed, but status field is primary display
+                             if ($row['warranty_expiry'] && $row['warranty_expiry'] < date("Y-m-d")) {
+                                // optional: show expired badge? Keeping it simple to status column for now
+                             }
+
                             echo "<tr>
-                                <td>{$row['appliance_id']}</td>
-                                <td>{$row['appliance_name']}</td>
-                                <td>{$row['brand']}</td>
-                                <td>{$row['model']}</td>
-                                <td>{$row['purchase_date']}</td>
-                                <td>{$row['warranty_expiry']}</td>
-                                <td>{$row['status']}</td>
+                                <td>#{$row['appliance_id']}</td>
+                                <td style='font-weight: 500;'>{$row['appliance_name']}</td>
+                                <td style='color: var(--text-secondary); font-size: 0.9rem;'>
+                                    {$row['brand']} {$row['model']}
+                                </td>
+                                <td style='font-size: 0.9rem;'>
+                                    <div>Purchased: {$row['purchase_date']}</div>
+                                    <div class='text-danger'>Expires: {$row['warranty_expiry']}</div>
+                                </td>
+                                <td><span class='badge {$status_badge}'>{$row['status']}</span></td>
                                 <td>" . ($row['username'] ?? 'Unassigned') . "</td>
                                 <td>
-                                    <a href='edit_appliance.php?id={$row['appliance_id']}' class='btn btn-edit'>Edit</a>
-                                    <a href='delete_appliance.php?id={$row['appliance_id']}' class='btn btn-delete' onclick='return confirm(\"Are you sure you want to delete this appliance?\");'>Delete</a>
+                                    <a href='edit_appliance.php?id={$row['appliance_id']}' class='btn btn-sm btn-secondary'><i class='fas fa-edit'></i></a>
+                                    <a href='delete_appliance.php?id={$row['appliance_id']}' class='btn btn-sm btn-danger' onclick='return confirm(\"Are you sure you want to delete this appliance?\");'><i class='fas fa-trash'></i></a>
                                 </td>
                             </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='9'>No appliances found.</td></tr>";
+                        echo "<tr><td colspan='7' style='text-align:center;'>No appliances found.</td></tr>";
                     }
                     ?>
                 </tbody>
             </table>
         </div>
     </div>
-    </body>
-    </html>
+</div>
+
+<script>
+    // Simple script to handle datalist selection mapping to hidden ID
+    document.getElementById('userSearch').addEventListener('input', function(e) {
+        var val = this.value;
+        var list = document.getElementById('userList');
+        var options = list.children;
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].value === val) {
+                document.getElementById('userId').value = options[i].getAttribute('data-id');
+                break;
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
