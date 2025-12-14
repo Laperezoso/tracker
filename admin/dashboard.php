@@ -133,7 +133,7 @@ if ($expired_result && $expired_result->num_rows > 0) {
     <!-- Charts Section -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
         <div class="card">
-            <h3 class="mb-4">Appliances per User</h3>
+            <h3 class="mb-4">Top 10 Users by Appliance Count</h3>
             <div style="position: relative; height: 300px; width: 100%;">
                 <canvas id="userApplianceChart"></canvas>
             </div>
@@ -286,6 +286,8 @@ $userCountResult = $conn->query("
     LEFT JOIN appliances a ON u.user_id = a.user_id
     WHERE u.role = 'user'
     GROUP BY u.user_id
+    ORDER BY total DESC
+    LIMIT 10
 ");
 
 $usernames = [];

@@ -14,6 +14,9 @@ $search = isset($_GET['search']) ? "%{$_GET['search']}%" : "%%";
 
 $add_error = $add_success = "";
 if (isset($_POST['add_user'])) {
+    if (!CSRF::check($_POST['csrf_token'])) {
+        die("CSRF validation failed.");
+    }
     $new_username = trim($_POST['new_username']);
     $new_password = trim($_POST['new_password']);
     $new_email = trim($_POST['new_email']);
@@ -115,11 +118,17 @@ $result = $stmt->get_result();
         <?php if (!empty($add_error)) echo "<div class='text-danger mb-4'>$add_error</div>"; ?>
 
         <form method="POST" class="flex gap-4 items-center flex-wrap">
+            <?php echo CSRF::input(); ?>
             <div style="flex: 1; min-width: 200px;">
                 <input type="text" name="new_username" class="form-control" placeholder="Username" required>
             </div>
             <div style="flex: 1; min-width: 200px;">
-                <input type="password" name="new_password" class="form-control" placeholder="Password" required>
+                <div class="password-wrapper">
+                    <input type="password" name="new_password" id="new_password" class="form-control" placeholder="Password" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('new_password', this)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
             <div style="flex: 1; min-width: 200px;">
                 <input type="email" name="new_email" class="form-control" placeholder="Email Address" required>
@@ -189,5 +198,21 @@ $result = $stmt->get_result();
     </div>
 </div>
 
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>

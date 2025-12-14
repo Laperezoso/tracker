@@ -13,6 +13,9 @@ $applianceObj = new Appliance($conn);
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!CSRF::check($_POST['csrf_token'])) {
+        die("CSRF validation failed.");
+    }
     $name = trim($_POST["appliance_name"]);
     $brand = trim($_POST["brand"]);
     $model = trim($_POST["model"]);
@@ -74,9 +77,17 @@ if ($stmt->execute()) {
         <a href="dashboard.php" class="nav-link">Dashboard</a>
         <a href="view_appliances.php" class="nav-link">My Appliances</a>
         <a href="add_appliance.php" class="nav-link active">Add Appliance</a>
+        <a href="profile.php" class="nav-link">My Profile</a>
     </div>
     <div class="flex items-center gap-4">
-        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <div class="flex items-center gap-2">
+             <div style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <img src="../image/<?php echo !empty($_SESSION['profile_pic']) ? htmlspecialchars($_SESSION['profile_pic']) : 'default_avatar.png'; ?>" 
+                     alt="Profile" 
+                     style="width: 100%; height: 100%; object-fit: cover;">
+             </div>
+             <span style="font-weight: 500; font-size: 0.9rem;"><?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        </div>
         <a href="../logout.php" class="btn btn-sm btn-secondary">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
@@ -96,6 +107,7 @@ if ($stmt->execute()) {
         <?php endif; ?>
 
         <form method="POST">
+            <?php echo CSRF::input(); ?>
             <div class="form-group">
                 <label class="form-label">Appliance Name</label>
                 <input type="text" name="appliance_name" class="form-control" placeholder="e.g. Washing Machine" required>

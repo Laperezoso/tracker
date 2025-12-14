@@ -15,6 +15,9 @@
 
     $add_error = $add_success = "";
     if (isset($_POST['add_appliance'])) {
+        if (!CSRF::check($_POST['csrf_token'])) {
+            die("CSRF validation failed.");
+        }
         $name = trim($_POST['appliance_name']);
         $brand = trim($_POST['brand']);
         $model = trim($_POST['model']);
@@ -124,6 +127,7 @@
         <?php if (!empty($add_error)) echo "<div class='text-danger mb-4'>$add_error</div>"; ?>
 
         <form method="POST">
+            <?php echo CSRF::input(); ?>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
                 <div>
                     <label class="form-label">Appliance Name</label>

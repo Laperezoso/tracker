@@ -15,6 +15,10 @@ if (isset($_SESSION["role"])) {
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!CSRF::check($_POST['csrf_token'])) {
+        die("CSRF Token Verification Failed. Please refresh the page.");
+    }
+
     $username = trim($_POST["username"]);
     $password = trim($_POST["password"]);
 
@@ -40,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              $_SESSION["user_id"] = $user["user_id"];
              $_SESSION["username"] = $user["username"];
              $_SESSION["role"] = $user["role"];
+             $_SESSION["profile_pic"] = $user["profile_pic"];
              // ... redirect below
         } 
         // 2. Check if it matches as plain text (Migration logic)
@@ -54,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user_id"] = $user["user_id"];
             $_SESSION["username"] = $user["username"];
             $_SESSION["role"] = $user["role"];
+            $_SESSION["profile_pic"] = $user["profile_pic"];
         } 
         else {
             // Password incorrect
@@ -101,6 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <form method="POST" action="">
+            <?php echo CSRF::input(); ?>
             <div class="form-group">
                 <label class="form-label">Username</label>
                 <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
@@ -108,11 +115,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
                 <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
+                    <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary w-full">Sign In</button>
         </form>
     </div>
+
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>

@@ -37,9 +37,17 @@ $result = $applianceObj->getAppliances($user_id, $search);
         <a href="dashboard.php" class="nav-link">Dashboard</a>
         <a href="view_appliances.php" class="nav-link active">My Appliances</a>
         <a href="add_appliance.php" class="nav-link">Add Appliance</a>
+        <a href="profile.php" class="nav-link">My Profile</a>
     </div>
     <div class="flex items-center gap-4">
-        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <div class="flex items-center gap-2">
+             <div style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <img src="../image/<?php echo !empty($_SESSION['profile_pic']) ? htmlspecialchars($_SESSION['profile_pic']) : 'default_avatar.png'; ?>" 
+                     alt="Profile" 
+                     style="width: 100%; height: 100%; object-fit: cover;">
+             </div>
+             <span style="font-weight: 500; font-size: 0.9rem;"><?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        </div>
         <a href="../logout.php" class="btn btn-sm btn-secondary">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>

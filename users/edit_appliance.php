@@ -35,6 +35,9 @@ if (!$appliance) {
     $message = "❌ Appliance not found or not yours.";
 } else {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!CSRF::check($_POST['csrf_token'])) {
+        die("CSRF validation failed.");
+    }
     $name = trim($_POST["appliance_name"]);
     $brand = trim($_POST["brand"]);
     $model = trim($_POST["model"]);
@@ -118,9 +121,17 @@ if (!$appliance) {
         <a href="dashboard.php" class="nav-link">Dashboard</a>
         <a href="view_appliances.php" class="nav-link active">My Appliances</a>
         <a href="add_appliance.php" class="nav-link">Add Appliance</a>
+        <a href="profile.php" class="nav-link">My Profile</a>
     </div>
     <div class="flex items-center gap-4">
-        <span style="font-weight: 500; font-size: 0.9rem;">Hello, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        <div class="flex items-center gap-2">
+             <div style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <img src="../image/<?php echo !empty($_SESSION['profile_pic']) ? htmlspecialchars($_SESSION['profile_pic']) : 'default_avatar.png'; ?>" 
+                     alt="Profile" 
+                     style="width: 100%; height: 100%; object-fit: cover;">
+             </div>
+             <span style="font-weight: 500; font-size: 0.9rem;"><?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+        </div>
         <a href="../logout.php" class="btn btn-sm btn-secondary">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>
@@ -142,6 +153,7 @@ if (!$appliance) {
 
         <?php if ($appliance): ?>
         <form method="POST">
+            <?php echo CSRF::input(); ?>
             <div class="form-group">
                 <label class="form-label">Appliance Name</label>
                 <input type="text" name="appliance_name" class="form-control" value="<?php echo htmlspecialchars($appliance['appliance_name']); ?>" required>
@@ -177,5 +189,16 @@ if (!$appliance) {
     </div>
 </div>
 
+<footer class="footer">
+    <div class="flex justify-center gap-4 mb-4">
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-twitter"></i></a>
+        <a href="mailto:WarrantyTracker@gmail.com" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;"><strong>Appliance Warranty Tracker</strong> — Making home management easier.</p>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;">razelherodias014@gmail.com</p>
+    <p class="text-secondary" style="font-size: 0.9rem;">&copy; <?php echo date("Y"); ?> Appliance Service Warranty Tracker</p>
+</footer>
 </body>
+
 </html>
