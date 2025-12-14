@@ -43,7 +43,8 @@ if (isset($_POST['add_user'])) {
             $insert_sql = "INSERT INTO user_accounts (username, email, password, role, active, created_at)
                            VALUES (?, ?, ?, ?, 1, NOW())";
             $insert_stmt = $conn->prepare($insert_sql);
-            $insert_stmt->bind_param("ssss", $new_username, $new_email, $new_password, $new_role);
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+            $insert_stmt->bind_param("ssss", $new_username, $new_email, $hashed_password, $new_role);
 
             if ($insert_stmt->execute()) {
                 $add_success = "User added successfully!";

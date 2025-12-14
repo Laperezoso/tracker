@@ -33,20 +33,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Your account is inactive. Please contact the administrator.";
         }
         
+        // Check if password matches (Try Hash first, then Plain Text)
+        // 1. Check if it matches as a BCRYPT hash
+        if (password_verify($password, $user["password"])) {
+             // Valid hash, proceed
+             $_SESSION["user_id"] = $user["user_id"];
+             $_SESSION["username"] = $user["username"];
+             $_SESSION["role"] = $user["role"];
+             // ... redirect below
+        } 
+        // 2. Check if it matches as plain text (Migration logic)
         elseif ($password === $user["password"]) {
+            // It matches plain text! Upgrade to Hash.
+            $newHash = password_hash($password, PASSWORD_DEFAULT);
+            $updateStmt = $conn->prepare("UPDATE user_accounts SET password = ? WHERE user_id = ?");
+            $updateStmt->bind_param("si", $newHash, $user["user_id"]);
+            $updateStmt->execute();
+
+            // Login check: proceed
             $_SESSION["user_id"] = $user["user_id"];
             $_SESSION["username"] = $user["username"];
             $_SESSION["role"] = $user["role"];
+        } 
+        else {
+            // Password incorrect
+             $error = "Invalid password!";
+        }
 
-            
-            if ($user["role"] === "admin") {
-                header("Location: admin/dashboard.php");
-            } else {
-                header("Location: users/dashboard.php");
-            }
-            exit;
-        } else {
-            $error = "Invalid password!";
+        // If session is set (Login successful)
+        if (isset($_SESSION["user_id"])) {
+             if ($user["role"] === "admin") {
+                 header("Location: admin/dashboard.php");
+             } else {
+                 header("Location: users/dashboard.php");
+             }
+             exit;
         }
     } else {
         $error = "No account found with that username!";
