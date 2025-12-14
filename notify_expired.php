@@ -28,12 +28,13 @@ while ($row = $result->fetch_assoc()) {
 
     // Email subject and body
     $subject = "Warranty Expired: $appliance_name";
-    $body = "
-        <p>Hi $username,</p>
-        <p>This is to inform you that your appliance <b>$appliance_name</b> warranty expired on <b>$expiry_date</b>.</p>
+    
+    $content = "
+        <p>This is to inform you that your appliance <b style='color:#d32f2f;'>$appliance_name</b> warranty expired on <b>$expiry_date</b>.</p>
         <p>Please check your appliance and take necessary action.</p>
-        <p>Thank you,<br>Appliance Service Warranty Tracker</p>
     ";
+
+    $body = Mailer::getTemplate($username, "Warranty Expired", $content);
 
     // Send email using Mailer class
     $send_status = Mailer::send($email, $subject, $body);

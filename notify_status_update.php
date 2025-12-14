@@ -57,65 +57,27 @@ switch ($status) {
 // Subject
 $subject = "Status Update: $appliance_name";
 
-// 🎨 NEW: Styled Email Template
-$body = '
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f6ff; padding:20px;">
-    <tr>
-        <td align="center">
-            <table width="600" cellpadding="0" cellspacing="0" 
-                   style="background:white; border-radius:10px; padding:20px; 
-                          box-shadow:0 4px 10px rgba(0,0,0,0.15); font-family:Arial, sans-serif;">
+// Content
+$content = '
+    <p>
+        The status of your appliance <b style="color:#0d47a1;">' . htmlspecialchars($appliance_name) . '</b> 
+        has been updated.
+    </p>
 
-                <!-- Header -->
-                <tr>
-                    <td align="center" 
-                        style="background:#0d47a1; padding:15px; border-radius:8px 8px 0 0;">
-                        <h2 style="color:white; margin:0; font-size:24px;">
-                            Appliance Status Update
-                        </h2>
-                    </td>
-                </tr>
+    <div style="padding:15px; 
+                background:#e3f2fd; 
+                border-left:5px solid #0d47a1; 
+                border-radius:6px; 
+                margin:15px 0;
+                font-size:16px;">
+        ' . $status_message . '
+    </div>
 
-                <!-- Body -->
-                <tr>
-                    <td style="padding:20px; color:#111; font-size:16px; line-height:1.6;">
-                        <p>Hi <b>'.$username.'</b>,</p>
-
-                        <p>
-                            The status of your appliance <b style="color:#0d47a1;">'.$appliance_name.'</b> 
-                            has been updated.
-                        </p>
-
-                        <div style="padding:15px; 
-                                    background:#e3f2fd; 
-                                    border-left:5px solid #0d47a1; 
-                                    border-radius:6px; 
-                                    margin:15px 0;
-                                    font-size:16px;">
-                            '.$status_message.'
-                        </div>
-
-                        <p>If you did not request this change, please contact support immediately.</p>
-
-                        <p style="margin-top:30px;">
-                            Thank you,<br>
-                            <b>Appliance Service Warranty Tracker</b>
-                        </p>
-                    </td>
-                </tr>
-
-                <!-- Footer -->
-                <tr>
-                    <td align="center" style="padding:15px; color:#555; font-size:14px;">
-                        This is an automated message — please do not reply.
-                    </td>
-                </tr>
-
-            </table>
-        </td>
-    </tr>
-</table>
+    <p>If you did not request this change, please contact support immediately.</p>
 ';
+
+// Generate email body using template
+$body = Mailer::getTemplate($username, "Appliance Status Update", $content);
 
 // Send email
 $send_status = Mailer::send($email, $subject, $body);

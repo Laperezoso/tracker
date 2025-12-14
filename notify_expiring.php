@@ -31,12 +31,13 @@
 
         // Email subject and body
         $subject = "Warranty Expiry Reminder: $appliance_name";
-        $body = "
-            <p>Hi $username,</p>
-            <p>This is a friendly reminder that your appliance <b>$appliance_name</b> will expire on <b>$expiry_date</b>.</p>
+        
+        $content = "
+            <p>This is a friendly reminder that your appliance <b style='color:#0d47a1;'>$appliance_name</b> will expire on <b>$expiry_date</b>.</p>
             <p>Please take any necessary action before it expires.</p>
-            <p>Thank you,<br>Appliance Service Warranty Tracker</p>
         ";
+
+        $body = Mailer::getTemplate($username, "Warranty Expiry Reminder", $content);
 
         // Send email using Mailer class
         $send_status = Mailer::send($email, $subject, $body);

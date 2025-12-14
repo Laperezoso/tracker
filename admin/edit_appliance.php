@@ -49,132 +49,98 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Appliance (Admin)</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 20px;
-            color: #111;
-            background: url("../image/logo.png") no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        h2 {
-            color: #0d47a1;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        a {
-            color: #0d47a1;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        form {
-            max-width: 500px;
-            margin: 0 auto;
-            background-color: #ffffffcc;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #0d47a1;
-        }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 8px 10px;
-            margin-bottom: 15px;
-            border: 1px solid #0d47a1;
-            border-radius: 6px;
-            background-color: #f9f9f9;
-            box-sizing: border-box;
-        }
-
-        input[disabled] {
-            background-color: #e3f2fd;
-            color: #555;
-        }
-
-        button {
-            display: block;
-            width: 100%;
-            background-color: #0d47a1;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        button:hover {
-            background-color: #1565c0;
-        }
-
-        p.error {
-            color: #d32f2f;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        p.success {
-            color: #388e3c;
-            font-weight: bold;
-            text-align: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Appliance (Admin) | Warranty Tracker</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h2>🛠 Edit Appliance (Admin)</h2>
-    <a href="manage_appliance.php">← Back to Appliance List</a><br><br>
 
-    <?php if ($error): ?>
-        <p class="error"><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
+<nav class="navbar">
+    <div class="nav-brand flex items-center gap-2">
+        <img src="../image/Clearbglogo.png" alt="Logo" style="height: 40px;">
+        Warranty Tracker
+    </div>
+    <div class="nav-links">
+        <a href="dashboard.php" class="nav-link">Dashboard</a>
+        <a href="manage_users.php" class="nav-link">Users</a>
+        <a href="manage_appliance.php" class="nav-link active">Appliances</a>
+        <a href="print_report.php" class="nav-link">Reports</a>
+    </div>
+    <div class="flex items-center gap-4">
+        <span style="font-weight: 500; font-size: 0.9rem;">Admin</span>
+        <a href="../logout.php" class="btn btn-sm btn-secondary">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+    </div>
+</nav>
 
-    <?php if ($success): ?>
-        <p class="success"><?= htmlspecialchars($success) ?></p>
-    <?php endif; ?>
+<div class="container" style="max-width: 600px;">
+    <div class="card">
+        <div class="flex items-center justify-between mb-4">
+            <h3>Edit Appliance Status</h3>
+            <a href="manage_appliance.php" class="text-secondary hover:text-primary"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
 
-    <form method="POST">
-        <fieldset disabled>
-            <label>Appliance Name:</label>
-            <input type="text" value="<?= htmlspecialchars($appliance['appliance_name']) ?>">
+        <?php if ($error): ?>
+            <div class="text-center mb-4 text-danger">
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
 
-            <label>Brand:</label>
-            <input type="text" value="<?= htmlspecialchars($appliance['brand']) ?>">
+        <?php if ($success): ?>
+            <div class="text-center mb-4 text-success">
+                <?= htmlspecialchars($success) ?>
+            </div>
+        <?php endif; ?>
 
-            <label>Model:</label>
-            <input type="text" value="<?= htmlspecialchars($appliance['model']) ?>">
+        <form method="POST">
+            <fieldset disabled style="border: none; padding: 0; margin: 0;">
+                <div class="form-group">
+                    <label class="form-label">Appliance Name</label>
+                    <input type="text" class="form-control" value="<?= htmlspecialchars($appliance['appliance_name']) ?>">
+                </div>
 
-            <label>Purchase Date:</label>
-            <input type="text" value="<?= htmlspecialchars($appliance['purchase_date']) ?>">
+                <div class="form-group">
+                    <label class="form-label">Brand</label>
+                    <input type="text" class="form-control" value="<?= htmlspecialchars($appliance['brand']) ?>">
+                </div>
 
-            <label>Warranty Expiry:</label>
-            <input type="text" value="<?= htmlspecialchars($appliance['warranty_expiry']) ?>">
-        </fieldset>
+                <div class="form-group">
+                    <label class="form-label">Model</label>
+                    <input type="text" class="form-control" value="<?= htmlspecialchars($appliance['model']) ?>">
+                </div>
 
-        <label>Status:</label>
-        <select name="status" required>
-            <option value="Working" <?= ($appliance['status'] === 'Working') ? 'selected' : '' ?>>Working</option>
-            <option value="Broken" <?= ($appliance['status'] === 'Broken') ? 'selected' : '' ?>>Broken</option>
-            <option value="Under Repair" <?= ($appliance['status'] === 'Under Repair') ? 'selected' : '' ?>>Under Repair</option>
-        </select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Purchase Date</label>
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($appliance['purchase_date']) ?>">
+                    </div>
 
-        <button type="submit">Update Status</button>
-    </form>
+                    <div class="form-group">
+                        <label class="form-label">Warranty Expiry</label>
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($appliance['warranty_expiry']) ?>">
+                    </div>
+                </div>
+            </fieldset>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+
+            <div class="form-group">
+                <label class="form-label">Update Status</label>
+                <select name="status" class="form-control" required>
+                    <option value="Working" <?= ($appliance['status'] === 'Working') ? 'selected' : '' ?>>Working</option>
+                    <option value="Broken" <?= ($appliance['status'] === 'Broken') ? 'selected' : '' ?>>Broken</option>
+                    <option value="Under Repair" <?= ($appliance['status'] === 'Under Repair') ? 'selected' : '' ?>>Under Repair</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-full">
+                <i class="fas fa-save"></i> Update Status
+            </button>
+        </form>
+    </div>
+</div>
+
 </body>
 </html>
