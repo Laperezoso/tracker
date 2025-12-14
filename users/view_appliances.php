@@ -76,10 +76,21 @@ $result = $applianceObj->getAppliances($user_id, $search);
             <tbody>
                 <?php if ($result->num_rows > 0) { ?>
                     <?php while ($row = $result->fetch_assoc()) { 
+                        $status_text = $row['status'];
                         $status_badge = "badge-success";
+                        
+                        // Check for expiry
+                        $expiry_date = $row['warranty_expiry'];
+                        $is_expired = ($expiry_date && $expiry_date < date('Y-m-d'));
+
                         if (strtolower($row['status']) == 'broken') $status_badge = "badge-danger";
-                        if (strtolower($row['status']) == 'under repair') $status_badge = "badge-warning";
-                        if (strtolower($row['status']) == 'expired') $status_badge = "badge-danger";
+                        elseif (strtolower($row['status']) == 'under repair') $status_badge = "badge-warning";
+                        
+                        // Override if expired
+                        if ($is_expired) {
+                            $status_text = "Expired";
+                            $status_badge = "badge-danger";
+                        }
                     ?>
                         <tr>
                             <td>#<?php echo $row['appliance_id']; ?></td>
@@ -89,7 +100,7 @@ $result = $applianceObj->getAppliances($user_id, $search);
                             </td>
                             <td><?php echo htmlspecialchars($row['purchase_date'] ?? 'N/A'); ?></td>
                             <td class="text-danger"><?php echo htmlspecialchars($row['warranty_expiry'] ?? 'N/A'); ?></td>
-                            <td><span class="badge <?php echo $status_badge; ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
+                            <td><span class="badge <?php echo $status_badge; ?>"><?php echo htmlspecialchars($status_text); ?></span></td>
                             <td>
                                 <div class="flex gap-2">
                                     <a href="edit_appliance.php?id=<?php echo $row['appliance_id']; ?>" class="btn btn-sm btn-secondary" title="Edit"><i class="fas fa-edit"></i></a>
@@ -107,6 +118,18 @@ $result = $applianceObj->getAppliances($user_id, $search);
         </table>
     </div>
 </div>
+
+<footer class="footer">
+    <div class="flex justify-center gap-4 mb-4">
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-twitter"></i></a>
+        <a href="mailto:WarrantyTracker@gmail.com" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;"><strong>Appliance Warranty Tracker</strong> — Making home management easier.</p>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;">razelherodias014@gmail.com</p>
+    <p class="text-secondary" style="font-size: 0.9rem;">&copy; <?php echo date("Y"); ?> Appliance Service Warranty Tracker</p>
+</footer>
+
 
 </body>
 </html>

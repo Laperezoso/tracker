@@ -87,7 +87,6 @@ if ($stmt->execute()) {
     <div class="card">
         <div class="flex items-center justify-between mb-4">
             <h3>Add New Appliance</h3>
-            <a href="dashboard.php" class="text-secondary hover:text-primary"><i class="fas fa-arrow-left"></i> Back</a>
         </div>
 
         <?php if (!empty($message)): ?>
@@ -130,6 +129,18 @@ if ($stmt->execute()) {
         </form>
     </div>
 </div>
+
+<footer class="footer">
+    <div class="flex justify-center gap-4 mb-4">
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fab fa-twitter"></i></a>
+        <a href="mailto:WarrantyTracker@gmail.com" class="text-secondary hover:text-primary" style="font-size: 1.25rem;"><i class="fas fa-envelope"></i></a>
+    </div>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;"><strong>Appliance Warranty Tracker</strong> — Making home management easier.</p>
+    <p class="text-secondary" style="margin-bottom: 0.5rem;">razelherodias014@gmail.com</p>
+    <p class="text-secondary" style="font-size: 0.9rem;">&copy; <?php echo date("Y"); ?> Appliance Service Warranty Tracker</p>
+</footer>
+
 
 </body>
 </html>

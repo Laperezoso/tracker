@@ -11,7 +11,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "user") {
 $username = $_SESSION["username"];
 $user_id = $_SESSION["user_id"];
 
-$expiredQuery = $conn->prepare("SELECT COUNT(*) AS total FROM appliances WHERE user_id = ? AND status = 'Expired'");
+$expiredQuery = $conn->prepare("SELECT COUNT(DISTINCT a.appliance_id) AS total FROM appliances a JOIN warranty w ON a.appliance_id = w.appliance_id WHERE a.user_id = ? AND w.warranty_expiry < CURDATE()");
 $expiredQuery->bind_param("i", $user_id);
 $expiredQuery->execute();
 $expiredResult = $expiredQuery->get_result()->fetch_assoc()["total"];
@@ -77,14 +77,32 @@ $date = date("F j, Y");
     </div>
 
     <!-- Stats Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- Stats Grid -->
+    
+    <!-- Top Row: All Appliances -->
+    <div class="mb-4">
+        <div class="card flex items-center justify-between p-6">
+            <div class="flex items-center gap-4">
+                <div style="background: #e0f2fe; color: #0284c7; width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem;">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div>
+                    <div style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">Total Appliances</div>
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary);"><?php echo $totalResult; ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row: Broken | Working -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
         <div class="card flex items-center gap-4">
-            <div style="background: #e0f2fe; color: #0284c7; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                <i class="fas fa-cube"></i>
+            <div style="background: #fee2e2; color: #dc2626; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-times-circle"></i>
             </div>
             <div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Total Appliances</div>
-                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $totalResult; ?></div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Broken</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $brokenResult; ?></div>
             </div>
         </div>
 
@@ -97,17 +115,10 @@ $date = date("F j, Y");
                 <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $workingResult; ?></div>
             </div>
         </div>
+    </div>
 
-        <div class="card flex items-center gap-4">
-            <div style="background: #fee2e2; color: #dc2626; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                <i class="fas fa-times-circle"></i>
-            </div>
-            <div>
-                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Broken</div>
-                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $brokenResult; ?></div>
-            </div>
-        </div>
-
+    <!-- Third Row: In Repair | Expired -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
         <div class="card flex items-center gap-4">
             <div style="background: #fffbeb; color: #d97706; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                 <i class="fas fa-tools"></i>
@@ -115,6 +126,16 @@ $date = date("F j, Y");
             <div>
                 <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">In Repair</div>
                 <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $repairResult; ?></div>
+            </div>
+        </div>
+
+        <div class="card flex items-center gap-4">
+            <div style="background: #fdf2f8; color: #db2777; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="fas fa-hourglass-end"></i>
+            </div>
+            <div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">Expired</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);"><?php echo $expiredResult; ?></div>
             </div>
         </div>
     </div>
